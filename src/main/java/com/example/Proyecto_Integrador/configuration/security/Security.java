@@ -48,6 +48,7 @@ public class Security {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Agregar configuración de CORS
 
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/administrador/login").permitAll()
                         .requestMatchers("/administrador/registro").hasRole(Rol.ADMIN.toString())
                         .anyRequest().authenticated()
                 )
