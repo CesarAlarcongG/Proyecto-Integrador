@@ -1,12 +1,14 @@
 package com.example.Proyecto_Integrador.persistence.entity;
 
 import com.example.Proyecto_Integrador.persistence.entity.enums.Rol;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,6 +31,10 @@ public class Administrador implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Rol rol;
+
+    @OneToMany(mappedBy = "administrador")
+    @JsonManagedReference(value = "administrador_actividad")
+    private List<Actividad> actividades;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

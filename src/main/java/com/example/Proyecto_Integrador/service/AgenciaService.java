@@ -33,9 +33,9 @@ public class AgenciaService {
     public Optional<Agencia> guardarEnLaBD(Agencia agencia){
         return Optional.of(agenciaRepository.save(agencia));
     }
-    public Optional<Agencia> relacionarActividad(Agencia agencia, ActividadEnum actividadEnum){
+    public Optional<Agencia> relacionarActividad(Agencia agencia, ActividadEnum actividadEnum, int id){
         // Almacenamos actividad y lo relacionamos con agencia
-        Actividad actividad = actividadService.obtenerActividad(agencia, actividadEnum);
+        Actividad actividad = actividadService.obtenerActividad(agencia, actividadEnum, id);
 
         List<Actividad> actividadList = agencia.getActividades();
         actividadList.add(actividad);
@@ -43,5 +43,9 @@ public class AgenciaService {
         agencia.setActividades(actividadList);
 
         return Optional.of(agencia);
+    }
+
+    public List<Agencia> obtenerTodasLasAgencias(){
+        return agenciaRepository.findAll();
     }
 }

@@ -13,4 +13,5 @@ public class AgenciaDto {
     private String provincia;
     private String dirección;
     private String referencia;
+    private int idAdministrador;
 }

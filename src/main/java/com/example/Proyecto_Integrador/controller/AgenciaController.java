@@ -1,7 +1,6 @@
 package com.example.Proyecto_Integrador.controller;
 
 import com.example.Proyecto_Integrador.dto.AgenciaDto;
-import com.example.Proyecto_Integrador.persistence.entity.Actividad;
 import com.example.Proyecto_Integrador.persistence.entity.Agencia;
 import com.example.Proyecto_Integrador.persistence.entity.enums.ActividadEnum;
 import com.example.Proyecto_Integrador.service.ActividadService;
@@ -9,10 +8,7 @@ import com.example.Proyecto_Integrador.service.AgenciaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +30,7 @@ public class AgenciaController {
         // Guardar información en la BD
         Optional<Agencia> agencia = agenciaService.guardarEnLaBD(agenciaMapeado);
 
-        agencia = agenciaService.relacionarActividad(agencia.get(), ActividadEnum.REGISTRAR);
+        agencia = agenciaService.relacionarActividad(agencia.get(), ActividadEnum.REGISTRAR, agenciaDto.getIdAdministrador());
 
         //Validamos si se gurdo en la BD y devolvemos respuesta en base a ello
         if (agencia.isPresent()){
@@ -47,6 +43,19 @@ public class AgenciaController {
                     .body("No se pudo registrar la agencia.");
         }
 
+    }
+
+    @GetMapping("/obtener/todos")
+    public ResponseEntity<?> obtenerTodasLasAgencias(){
+        List<Agencia> agenciaList = agenciaService.obtenerTodasLasAgencias();
+
+        if (agenciaList.isEmpty()){
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Aun no ha registrado agencias");
+        }
+
+        return ResponseEntity.ok(agenciaList);
     }
 
 

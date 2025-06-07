@@ -23,8 +23,10 @@ public class Agencia {
     private String dirección;
     private String referencia;
 
-    @OneToMany(mappedBy = "")
+    @OneToMany(mappedBy = "agencia")
     @JsonManagedReference(value = "agencia_actividad")
     private List<Actividad> actividades;
+
+
 
 }

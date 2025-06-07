@@ -4,6 +4,7 @@ import com.example.Proyecto_Integrador.dto.AdministradorDto;
 import com.example.Proyecto_Integrador.dto.CredencialesDto;
 import com.example.Proyecto_Integrador.dto.JwtToken;
 import com.example.Proyecto_Integrador.dto.RespuestaLoginDto;
+import com.example.Proyecto_Integrador.persistence.entity.Actividad;
 import com.example.Proyecto_Integrador.persistence.entity.Administrador;
 import com.example.Proyecto_Integrador.persistence.repository.AdministradorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class AdministradorService {
@@ -59,6 +62,11 @@ public class AdministradorService {
     }
 
 
+    public Administrador obtenerPorId(int id){
+        return administradorRepository.findById(id).get();
+    }
+
+
     /// ////////////////////////////////////////////////////////////////////////////////
     public Administrador mapearAdministrador(AdministradorDto administradorDto){
         return Administrador.builder()
@@ -69,5 +77,12 @@ public class AdministradorService {
                 .dni(administradorDto.getDni())
                 .numeroLicenciaDeConducir(administradorDto.getNumeroLicenciaDeConducir())
                 .build();
+    }
+
+    public Administrador agregarActividad(Administrador administrador, Actividad actividad){
+        List<Actividad> actividadList = administrador.getActividades();
+        actividadList.add(actividad);
+        administrador.setActividades(actividadList);
+        return administradorRepository.save(administrador);
     }
 }

@@ -15,17 +15,26 @@ public class ActividadService {
 
     @Autowired
     private ActividadRepository actividadRepository;
+    @Autowired
+    private AdministradorService administradorService;
 
-    public Actividad obtenerActividad(Object object, ActividadEnum actividadEnum){
+    public Actividad obtenerActividad(Object object, ActividadEnum actividadEnum, int id){
         Actividad actividad = Actividad.builder()
                 .actividadEnum(actividadEnum)
                 .fecha(new Date())
                 .build();
+        Administrador administrador = administradorService.obtenerPorId(id);
+        actividad.setAdministrador(administrador);
 
         if(object instanceof Agencia agencia){
             actividad.setAgencia(agencia);
         }
-        return actividadRepository.save(actividad);
+        actividad = actividadRepository.save(actividad);
+        administradorService.agregarActividad(administrador, actividad);
+
+        return actividad;
 
     }
+
+
 }

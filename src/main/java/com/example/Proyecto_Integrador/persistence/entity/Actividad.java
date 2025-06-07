@@ -29,4 +29,9 @@ public class Actividad {
     @JoinColumn(referencedColumnName = "id")
     private Agencia agencia;
 
+    @ManyToOne
+    @JsonBackReference(value = "administrador_actividad")
+    @JoinColumn(referencedColumnName = "id")
+    private Administrador administrador ;
+
 }
