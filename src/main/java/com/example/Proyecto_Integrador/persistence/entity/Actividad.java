@@ -34,4 +34,8 @@ public class Actividad {
     @JoinColumn(referencedColumnName = "id")
     private Administrador administrador ;
 
+    @ManyToOne
+    @JsonBackReference(value = "ruta_actividad")
+    @JoinColumn(referencedColumnName = "id")
+    private Ruta ruta;
 }

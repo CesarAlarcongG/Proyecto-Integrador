@@ -3,6 +3,7 @@ package com.example.Proyecto_Integrador.service;
 import com.example.Proyecto_Integrador.persistence.entity.Actividad;
 import com.example.Proyecto_Integrador.persistence.entity.Administrador;
 import com.example.Proyecto_Integrador.persistence.entity.Agencia;
+import com.example.Proyecto_Integrador.persistence.entity.Ruta;
 import com.example.Proyecto_Integrador.persistence.entity.enums.ActividadEnum;
 import com.example.Proyecto_Integrador.persistence.repository.ActividadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class ActividadService {
 
         if(object instanceof Agencia agencia){
             actividad.setAgencia(agencia);
+        }else if (object instanceof Ruta ruta){
+            actividad.setRuta(ruta);
         }
         actividad = actividadRepository.save(actividad);
         administradorService.agregarActividad(administrador, actividad);

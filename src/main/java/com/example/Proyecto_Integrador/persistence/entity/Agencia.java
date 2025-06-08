@@ -1,5 +1,6 @@
 package com.example.Proyecto_Integrador.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,6 +27,11 @@ public class Agencia {
     @OneToMany(mappedBy = "agencia")
     @JsonManagedReference(value = "agencia_actividad")
     private List<Actividad> actividades;
+
+    @ManyToOne
+    @JsonBackReference(value = "ruta_agencia")
+    @JoinColumn(referencedColumnName = "id")
+    private Ruta ruta;
 
 
 

@@ -19,6 +19,18 @@ public class AgenciaService {
     @Autowired
     private ActividadService actividadService;
 
+    public Optional<Agencia> guardarEnLaBD(Agencia agencia){
+        return Optional.of(agenciaRepository.save(agencia));
+    }
+    public List<Agencia> obtenerTodasLasAgencias(){
+        return agenciaRepository.findAll();
+    }
+    public Optional<Agencia> obtenerPorId(int id){
+        return agenciaRepository.findById(id);
+    }
+
+
+
     public Agencia mapear(AgenciaDto agenciaDto){
         return Agencia.builder()
                 .departamento(agenciaDto.getDepartamento())
@@ -28,10 +40,6 @@ public class AgenciaService {
                 .referencia(agenciaDto.getReferencia())
                 .build();
 
-    }
-
-    public Optional<Agencia> guardarEnLaBD(Agencia agencia){
-        return Optional.of(agenciaRepository.save(agencia));
     }
     public Optional<Agencia> relacionarActividad(Agencia agencia, ActividadEnum actividadEnum, int id){
         // Almacenamos actividad y lo relacionamos con agencia
@@ -45,7 +53,7 @@ public class AgenciaService {
         return Optional.of(agencia);
     }
 
-    public List<Agencia> obtenerTodasLasAgencias(){
-        return agenciaRepository.findAll();
-    }
+
+
+
 }
