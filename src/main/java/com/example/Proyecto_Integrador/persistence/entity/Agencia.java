@@ -1,10 +1,12 @@
 package com.example.Proyecto_Integrador.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,11 +30,9 @@ public class Agencia {
     @JsonManagedReference(value = "agencia_actividad")
     private List<Actividad> actividades;
 
-    @ManyToOne
+    @ManyToMany(mappedBy = "agencias")
     @JsonBackReference(value = "ruta_agencia")
-    @JoinColumn(referencedColumnName = "id")
-    private Ruta ruta;
-
+    private List<Ruta> rutas = new ArrayList<>();
 
 
 }

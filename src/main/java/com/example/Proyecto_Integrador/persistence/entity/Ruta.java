@@ -21,9 +21,15 @@ public class Ruta {
 
     private String nombreRuta;
 
-    @OneToMany(mappedBy = "ruta")
+    @ManyToMany
+    @JoinTable(
+            name = "ruta_agencia",
+            joinColumns = @JoinColumn(name = "ruta_id"),
+            inverseJoinColumns = @JoinColumn(name = "agencia_id")
+    )
     @JsonManagedReference(value = "ruta_agencia")
     private List<Agencia> agencias = new ArrayList<>();
+
 
     @OneToMany(mappedBy = "ruta")
     @JsonManagedReference(value = "ruta_actividad")

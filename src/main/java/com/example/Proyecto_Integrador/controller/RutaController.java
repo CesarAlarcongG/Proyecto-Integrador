@@ -9,16 +9,14 @@ import com.example.Proyecto_Integrador.service.RutaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/ruta")
 public class RutaController {
+
     @Autowired
     private RutaService rutaService;
     @Autowired
@@ -30,6 +28,8 @@ public class RutaController {
 
         ruta = rutaService.registrarEnBD(ruta);
 
+        ruta = rutaService.agregarAgencias(ruta, rutaDto.getIdAgencias());
+
        Actividad actividad = actividadService.obtenerActividad(ruta, ActividadEnum.REGISTRAR, rutaDto.getIdAdministrador());
 
        if (actividad == null){
@@ -38,6 +38,15 @@ public class RutaController {
 
        ruta = rutaService.agregarActividad(actividad, ruta);
 
+       ruta = rutaService.registrarEnBD(ruta);
+
         return ResponseEntity.ok(ruta);
+    }
+
+    @GetMapping("/obtener")
+    public ResponseEntity<?> obtenerTodasLasRutas(){
+        List<Ruta> rutaList = rutaService.obtenerTodasLasRutas();
+
+        return ResponseEntity.ok(rutaList);
     }
 }

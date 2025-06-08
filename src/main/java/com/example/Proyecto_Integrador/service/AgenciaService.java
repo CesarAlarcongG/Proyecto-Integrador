@@ -3,6 +3,7 @@ package com.example.Proyecto_Integrador.service;
 import com.example.Proyecto_Integrador.dto.AgenciaDto;
 import com.example.Proyecto_Integrador.persistence.entity.Actividad;
 import com.example.Proyecto_Integrador.persistence.entity.Agencia;
+import com.example.Proyecto_Integrador.persistence.entity.Ruta;
 import com.example.Proyecto_Integrador.persistence.entity.enums.ActividadEnum;
 import com.example.Proyecto_Integrador.persistence.repository.AgenciaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AgenciaService {
@@ -51,6 +53,22 @@ public class AgenciaService {
         agencia.setActividades(actividadList);
 
         return Optional.of(agencia);
+    }
+    public List<Agencia> relacionarAgenciaConRuta(List<Integer> agencias, Ruta ruta) {
+        if (agencias == null || agencias.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return agencias.stream()
+                .map(idAgencia -> {
+                    Agencia agencia = obtenerPorId(idAgencia).get();
+                    if (agencia.getRutas() == null) {
+                        agencia.setRutas(new ArrayList<>());
+                    }
+                    agencia.getRutas().add(ruta);
+                    agencia = guardarEnLaBD(agencia).get();
+                    return agencia;
+                })
+                .collect(Collectors.toList());
     }
 
 

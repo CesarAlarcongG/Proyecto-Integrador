@@ -13,6 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class RutaDto {
     private String nombre;
-    private List<Agencia> agencias;
+    private List<Integer> idAgencias;
     private int idAdministrador;
 }
