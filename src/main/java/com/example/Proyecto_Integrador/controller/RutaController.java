@@ -4,6 +4,7 @@ import com.example.Proyecto_Integrador.dto.RutaDto;
 import com.example.Proyecto_Integrador.persistence.entity.Actividad;
 import com.example.Proyecto_Integrador.persistence.entity.Ruta;
 import com.example.Proyecto_Integrador.persistence.entity.enums.ActividadEnum;
+import com.example.Proyecto_Integrador.persistence.repository.AgenciaRepository;
 import com.example.Proyecto_Integrador.service.ActividadService;
 import com.example.Proyecto_Integrador.service.RutaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/ruta")
@@ -21,6 +23,8 @@ public class RutaController {
     private RutaService rutaService;
     @Autowired
     private ActividadService actividadService;
+    @Autowired
+    private AgenciaRepository agenciaRepository;
 
     @PostMapping("/registrar")
     public ResponseEntity<?> registrarRuta(@RequestBody RutaDto rutaDto){
@@ -49,4 +53,39 @@ public class RutaController {
 
         return ResponseEntity.ok(rutaList);
     }
+
+    @PutMapping("/actualizar")
+    public ResponseEntity<?> actualizarRuta(@RequestBody RutaDto rutaDto) {
+        Optional<Ruta> optionalRuta = rutaService.obtenerPorId(rutaDto.getIdRuta());
+        if (optionalRuta.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ruta no encontrada");
+        }
+
+        Ruta ruta = optionalRuta.get();
+
+        // Limpiar agencias actuales de la ruta (para actualizar correctamente)
+        rutaService.limpiarRelacionesAgencias(ruta);
+
+        // Establecer nuevas agencias
+        ruta = rutaService.agregarAgencias(ruta, rutaDto.getIdAgencias());
+
+        // Registrar en BD después de modificar las relaciones
+        ruta = rutaService.registrarEnBD(ruta);
+
+        // Crear y asociar actividad
+        Actividad actividad = actividadService.obtenerActividad(ruta, ActividadEnum.ACTUALIZAR, rutaDto.getIdAdministrador());
+
+        if (actividad == null){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se agregó la actividad");
+        }
+
+        ruta = rutaService.agregarActividad(actividad, ruta);
+
+        return ResponseEntity.ok(ruta);
+    }
+
+
+
+
+
 }

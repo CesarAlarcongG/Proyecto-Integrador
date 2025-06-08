@@ -1,6 +1,5 @@
 package com.example.Proyecto_Integrador.dto;
 
-import com.example.Proyecto_Integrador.persistence.entity.Agencia;
 import lombok.*;
 
 import java.util.List;
@@ -12,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RutaDto {
+    private int idRuta;
     private String nombre;
     private List<Integer> idAgencias;
     private int idAdministrador;

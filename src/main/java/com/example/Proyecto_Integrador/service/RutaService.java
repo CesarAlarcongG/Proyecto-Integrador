@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RutaService {
@@ -33,6 +34,10 @@ public class RutaService {
         ruta.setAgencias(agenciaList);
         return ruta;
     }
+    // Agregar este método en RutaService
+    public Optional<Ruta> obtenerPorId(int id) {
+        return rutaRepository.findById(id);
+    }
 
     public Ruta agregarActividad(Actividad actividad, Ruta ruta){
         List<Actividad> actividadList = ruta.getActividades();
@@ -53,6 +58,18 @@ public class RutaService {
                 .build();
     }
 
-    
+    // Método auxiliar para limpiar relaciones existentes
+    public void limpiarRelacionesAgencias(Ruta ruta) {
+        // Obtener copia de las agencias actuales para evitar ConcurrentModificationException
+        List<Agencia> agenciasActuales = new ArrayList<>(ruta.getAgencias());
+
+        for (Agencia agencia : agenciasActuales) {
+            agencia.getRutas().remove(ruta);
+            agenciaService.guardarEnLaBD(agencia);
+        }
+
+        ruta.getAgencias().clear();
+        rutaRepository.save(ruta);
+    }
 
 }
