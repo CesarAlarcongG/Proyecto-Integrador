@@ -58,6 +58,57 @@ public class AgenciaController {
         return ResponseEntity.ok(agenciaList);
     }
 
+    @PutMapping("/actualizar")
+    public ResponseEntity<?> actualizarAgencia(@RequestBody AgenciaDto agenciaDto) {
+        // Validar que el ID de la agencia esté presente
+        if (agenciaDto.getIdAgencia() == null || agenciaDto.getIdAgencia().isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("El ID de la agencia es requerido para la actualización.");
+        }
+
+        try {
+            int id = Integer.parseInt(agenciaDto.getIdAgencia());
+
+            // Buscar la agencia existente
+            Optional<Agencia> agenciaExistente = agenciaService.obtenerPorId(id);
+
+            if (!agenciaExistente.isPresent()) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body("No se encontró la agencia con ID: " + agenciaDto.getIdAgencia());
+            }
+
+            // Actualizar los campos de la agencia existente
+            Agencia agenciaActualizar = agenciaExistente.get();
+            agenciaActualizar.setDepartamento(agenciaDto.getDepartamento());
+            agenciaActualizar.setProvincia(agenciaDto.getProvincia());
+            agenciaActualizar.setDirección(agenciaDto.getDirección());
+            agenciaActualizar.setReferencia(agenciaDto.getReferencia());
+
+            // Guardar los cambios
+            Optional<Agencia> agenciaActualizada = agenciaService.guardarEnLaBD(agenciaActualizar);
+
+            // Registrar la actividad de actualización
+            agenciaActualizada = agenciaService.relacionarActividad(
+                    agenciaActualizada.get(),
+                    ActividadEnum.ACTUALIZAR,
+                    agenciaDto.getIdAdministrador()
+            );
+
+            return ResponseEntity.ok(agenciaActualizada);
+
+        } catch (NumberFormatException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("El ID de la agencia debe ser un número válido.");
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al actualizar la agencia: " + e.getMessage());
+        }
+    }
+
 
 
 }

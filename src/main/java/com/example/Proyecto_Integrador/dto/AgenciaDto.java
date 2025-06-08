@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AgenciaDto {
+    private String idAgencia;
     private String departamento;
     private String provincia;
     private String dirección;
