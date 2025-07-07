@@ -63,6 +63,7 @@ public class RutaController {
 
         Ruta ruta = optionalRuta.get();
 
+        ruta.setNombreRuta(rutaDto.getNombre());
         // Limpiar agencias actuales de la ruta (para actualizar correctamente)
         rutaService.limpiarRelacionesAgencias(ruta);
 

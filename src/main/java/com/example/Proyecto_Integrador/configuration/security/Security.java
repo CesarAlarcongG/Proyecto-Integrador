@@ -48,7 +48,7 @@ public class Security {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Agregar configuración de CORS
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/administrador/login").permitAll()
+                        .requestMatchers("/administrador/login", "/agencia/obtener/todos").permitAll()
                         .requestMatchers("/administrador/registro").hasRole(Rol.ADMIN.toString())
                         .anyRequest().authenticated()
                 )
@@ -88,7 +88,7 @@ public class Security {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of("http://127.0.0.1:5500", "http://localhost:4321", "http://localhost:8080")); // Especifica los orígenes permitidos
+        corsConfiguration.setAllowedOrigins(List.of("http://127.0.0.1:5500", "http://localhost:4321", "http://localhost:8080","http://localhost:3000" )); // Especifica los orígenes permitidos
         corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         corsConfiguration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         corsConfiguration.setAllowCredentials(true); // Permitir credenciales
