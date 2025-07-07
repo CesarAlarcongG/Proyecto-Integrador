@@ -29,6 +29,17 @@ public class TrabajadorService {
         return trabajador;
     }
 
+    public Trabajador actualizarDatos(TrabajadorDto trabajadorDto) {
+        // 1. Buscar el trabajador existente
+        Trabajador trabajadorExistente = trabajadorRepository.findById(trabajadorDto.getId());
+
+        // 2. Actualizar sus datos
+        trabajadorExistente = actualizarDatos(trabajadorExistente, trabajadorDto);
+
+        // 3. Guardar los cambios
+        return trabajadorRepository.save(trabajadorExistente);
+    }
+
     /// //////////////////////////////////////////////
     private Trabajador mapearDeDtoATrabajador(TrabajadorDto trabajadorDto){
         return Trabajador.builder()
@@ -38,4 +49,15 @@ public class TrabajadorService {
                 .cargo(Cargo.valueOf(trabajadorDto.getCargo().toUpperCase()))
                 .build();
     }
+
+    private Trabajador actualizarDatos(Trabajador trabajadorExistente, TrabajadorDto trabajadorDto){
+        trabajadorExistente.setNombre(trabajadorDto.getNombre());
+        trabajadorExistente.setApellido(trabajadorDto.getApellido());
+        trabajadorExistente.setDni(trabajadorDto.getDni());
+        trabajadorExistente.setCargo(Cargo.valueOf(trabajadorDto.getCargo().toUpperCase()));
+        return trabajadorExistente;
+    }
+
+
+
 }

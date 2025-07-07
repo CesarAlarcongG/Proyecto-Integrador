@@ -5,10 +5,7 @@ import com.example.Proyecto_Integrador.persistence.entity.Trabajador;
 import com.example.Proyecto_Integrador.service.TrabajadorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/trabajador")
@@ -29,5 +26,14 @@ public class TrabajadorController {
 
         //3. Retornamos valor
         return ResponseEntity.ok(trabajador);
+    }
+
+    @PutMapping("/actualizar")
+    public ResponseEntity<?> actualizar(@RequestBody TrabajadorDto trabajadorDto){
+        Trabajador trabajador = trabajadorService.actualizarDatos(trabajadorDto);
+        if (trabajador == null){
+            return ResponseEntity.internalServerError().body("No se pudo actualizar losd atos");
+        }
+        return ResponseEntity.ok("El trabajador fué actualizado");
     }
 }
