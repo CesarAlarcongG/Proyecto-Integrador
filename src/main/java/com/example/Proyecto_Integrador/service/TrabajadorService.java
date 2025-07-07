@@ -40,6 +40,11 @@ public class TrabajadorService {
         return trabajadorRepository.save(trabajadorExistente);
     }
 
+    public Trabajador eliminarPorId(int id) {
+        trabajadorRepository.deleteById(id);
+        return trabajadorRepository.findById(id);
+    }
+
     /// //////////////////////////////////////////////
     private Trabajador mapearDeDtoATrabajador(TrabajadorDto trabajadorDto){
         return Trabajador.builder()

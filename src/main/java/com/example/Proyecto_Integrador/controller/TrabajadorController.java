@@ -29,11 +29,22 @@ public class TrabajadorController {
     }
 
     @PutMapping("/actualizar")
-    public ResponseEntity<?> actualizar(@RequestBody TrabajadorDto trabajadorDto){
+    public ResponseEntity<String> actualizar(@RequestBody TrabajadorDto trabajadorDto){
         Trabajador trabajador = trabajadorService.actualizarDatos(trabajadorDto);
         if (trabajador == null){
             return ResponseEntity.internalServerError().body("No se pudo actualizar losd atos");
         }
         return ResponseEntity.ok("El trabajador fué actualizado");
+    }
+
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<?> eliminarTrabjador(@PathVariable int id){
+        Trabajador trabajador = trabajadorService.eliminarPorId(id);
+
+        if(trabajador != null ){
+            return ResponseEntity.internalServerError().body("no se pudo eliminar al trabajador");
+        }
+
+        return ResponseEntity.ok("El trabajador fue eliminado");
     }
 }
