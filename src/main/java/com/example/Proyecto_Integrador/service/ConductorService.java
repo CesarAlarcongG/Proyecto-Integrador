@@ -6,6 +6,8 @@ import com.example.Proyecto_Integrador.persistence.repository.ConductorRepositor
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ConductorService {
     @Autowired
@@ -21,6 +23,15 @@ public class ConductorService {
         //Guardar
         conductor = conductorRepository.save(conductor);
         return conductor;
+    }
+    public boolean eliminarConductor(int id) {
+        conductorRepository.deleteById(id);
+        Optional<Conductor> conductor = conductorRepository.findById(id);
+
+        if (conductor.isPresent()){
+            return false;
+        }
+        return true;
     }
 
     /// /////////////////////////
@@ -39,4 +50,6 @@ public class ConductorService {
                 .numLicenciaConducir(conductorDto.getNumLicenciaConducir())
                 .build();
     }
+
+
 }
